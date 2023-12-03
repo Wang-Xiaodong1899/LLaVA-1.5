@@ -50,7 +50,7 @@ for item in anno:
     new_item['conversations'] = conv
     llava_data.append(new_item)
 
-with open('minigpt4_data.json','w') as f:
+with open('/mnt/workspace/minigpt4_data.json','w') as f:
     json.dump(llava_data, f)
 
 
