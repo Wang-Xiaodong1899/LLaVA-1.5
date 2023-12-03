@@ -2,7 +2,7 @@ import os
 import json
 import random
 
-file_path = '/Users/xiaodong/Downloads/filter_cap.json'
+file_path = '/mnt/workspace/cc_sbu_align/filter_cap.json'
 
 # read json
 with open(file_path, 'rb') as f:
