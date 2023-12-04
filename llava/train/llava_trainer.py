@@ -129,6 +129,13 @@ class LengthGroupedSampler(Sampler):
             indices = get_length_grouped_indices(self.lengths, self.batch_size, self.world_size, generator=self.generator)
         return iter(indices)
 
+def get_peft_state_non_lora_maybe_zero_3(named_params, require_grad_only=True):
+    to_return = {k: t for k, t in named_params if "lora_" not in k}
+    if require_grad_only:
+        to_return = {k: t for k, t in to_return.items() if t.requires_grad}
+    to_return = {k: maybe_zero_3(v, ignore_status=True).cpu() for k, v in to_return.items()}
+    return to_return
+
 # Borrowed from peft.utils.get_peft_model_state_dict
 def get_peft_state_maybe_zero_3(named_params, bias):
     if bias == "none":
@@ -282,9 +289,13 @@ class LLaVATrainer(Trainer):
             state_dict = get_peft_state_maybe_zero_3(
                 self.model.named_parameters(), self.args.lora_bias
             )
+            non_lora_state_dict = get_peft_state_non_lora_maybe_zero_3(
+                self.model.named_parameters()
+            )
             if self.args.local_rank == 0 or self.args.local_rank == -1:
                 self.model.config.save_pretrained(self.args.output_dir)
                 self.model.save_pretrained(self.args.output_dir, state_dict=state_dict)
+                torch.save(non_lora_state_dict, os.path.join(self.args.output_dir, 'non_lora_trainables.bin'))
         else:
             super(LLaVATrainer, self)._save_checkpoint(model, trial, metrics)
 
