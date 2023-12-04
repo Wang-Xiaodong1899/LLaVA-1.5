@@ -280,11 +280,11 @@ class LLaVATrainer(Trainer):
                 torch.save(weight_to_save, os.path.join(output_dir, f'mm_projector.bin'))
         elif getattr(self.args, 'lora_enable', False):
             state_dict = get_peft_state_maybe_zero_3(
-                model.named_parameters(), self.args.lora_bias
+                self.model.named_parameters(), self.args.lora_bias
             )
             if self.args.local_rank == 0 or self.args.local_rank == -1:
-                model.config.save_pretrained(self.args.output_dir)
-                model.save_pretrained(self.args.output_dir, state_dict=state_dict)
+                self.model.config.save_pretrained(self.args.output_dir)
+                self.model.save_pretrained(self.args.output_dir, state_dict=state_dict)
         else:
             super(LLaVATrainer, self)._save_checkpoint(model, trial, metrics)
 
