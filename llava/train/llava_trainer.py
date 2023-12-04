@@ -283,8 +283,8 @@ class LLaVATrainer(Trainer):
                 model.named_parameters(), self.args.lora_bias
             )
             if self.args.local_rank == 0 or self.args.local_rank == -1:
-                model.config.save_pretrained(output_dir)
-                model.save_pretrained(output_dir, state_dict=state_dict)
+                model.config.save_pretrained(self.args.output_dir)
+                model.save_pretrained(self.args.output_dir, state_dict=state_dict)
         else:
             super(LLaVATrainer, self)._save_checkpoint(model, trial, metrics)
 
