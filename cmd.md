@@ -1,6 +1,6 @@
 # Finetune with LoRA
 deepspeed llava/train/train_xformers.py \
-    --lora_enable True --lora_r 128 --lora_alpha 256 --mm_projector_lr 2e-5 \
+    --lora_enable True --lora_r 16 --lora_alpha 32 --mm_projector_lr 2e-5 \
     --deepspeed ./scripts/zero3.json \
     --model_name_or_path /mnt/workspace/llava-v1.5-7b \
     --version v1 \
@@ -34,3 +34,8 @@ deepspeed llava/train/train_xformers.py \
     --dataloader_num_workers 4 \
     --lazy_preprocess True \
     --report_to wandb
+
+# config
+r=16, alpha=32, bs=1, accumu=4, GPU=16.8G, 1 epoch, time=1 hour
+r=32, alpha=64, bs=1, accumu=4, GPU=18.0G, 1 epoch, time=1 hour
+r=64, alpha=128, bs=1, accumu=4, GPU=20.9G, 1 epoch, time=1 hour
