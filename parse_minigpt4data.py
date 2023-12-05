@@ -2,7 +2,8 @@ import os
 import json
 import random
 
-file_path = '/mnt/workspace/cc_sbu_align/filter_cap.json'
+# file_path = '/mnt/workspace/cc_sbu_align/filter_cap.json'
+file_path = '/mnt/workspace/InstructionGPT-4/filter_cap.json'
 
 # read json
 with open(file_path, 'rb') as f:
@@ -50,11 +51,5 @@ for item in anno:
     new_item['conversations'] = conv
     llava_data.append(new_item)
 
-with open('/mnt/workspace/minigpt4_data.json','w') as f:
+with open('/mnt/workspace/instruct-4_data.json','w') as f:
     json.dump(llava_data, f)
-
-
-
-
-
-
